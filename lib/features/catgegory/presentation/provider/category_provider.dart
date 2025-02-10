@@ -2,10 +2,8 @@ import 'package:bytes_delivery_app/features/catgegory/data/i_category_facade.dar
 import 'package:bytes_delivery_app/features/catgegory/data/model/category_model.dart';
 import 'package:flutter/material.dart';
 
-
 class CategoryProvider extends ChangeNotifier {
   final ICategoryFacade iCategoryFacade;
-  
   CategoryProvider({required this.iCategoryFacade});
 
   List<Category> _categories = [];
@@ -45,7 +43,6 @@ class CategoryProvider extends ChangeNotifier {
           _categories = categories;
           
           if (categories.isNotEmpty) {
-            // Find selected category or use first one
             Category selectedCategory = categories.firstWhere(
               (category) => category.isSelected,
               orElse: () => categories.first,
@@ -53,7 +50,6 @@ class CategoryProvider extends ChangeNotifier {
             
             _selectedCategoryId = selectedCategory.id;
             
-            // Fetch products for selected category
             final productResult = await iCategoryFacade.fetchProduct(
               value,
               selectedCategory.id,
@@ -85,7 +81,6 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
-  // Select category and fetch its products
   Future<void> selectCategory(String value, String categoryId) async {
     if (_selectedCategoryId == categoryId) return;
     
@@ -93,10 +88,9 @@ class CategoryProvider extends ChangeNotifier {
     _selectedCategoryId = categoryId;
     _currentPage = 1;
     _hasMorePages = true;
-    _products = []; // Clear existing products
+    _products = []; 
     notifyListeners();
     
-    // Update selected state in categories
     _categories = _categories.map((category) {
       return category.copyWith(
         isSelected: category.id == categoryId,
@@ -120,7 +114,6 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Load more products (pagination)
   Future<void> loadMore(String value) async {
     if (_isLoading || !_hasMorePages || _selectedCategoryId == null) return;
     

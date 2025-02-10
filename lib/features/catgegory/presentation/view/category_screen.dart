@@ -46,7 +46,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              // Implement search
             },
           ),
         ],
